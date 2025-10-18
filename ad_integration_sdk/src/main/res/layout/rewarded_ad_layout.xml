@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rewarded_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black">
+
+    <!-- Video/Content Container -->
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- Video View -->
+        <VideoView
+            android:id="@+id/ad_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Image Fallback -->
+        <ImageView
+            android:id="@+id/ad_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/ad_image_description"
+            android:visibility="gone" />
+
+        <!-- Bottom Info Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:orientation="vertical"
+            android:background="@drawable/gradient_overlay_bottom"
+            android:padding="@dimen/ad_padding_large">
+
+            <!-- Ad Title -->
+            <TextView
+                android:id="@+id/ad_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ad_text_size_large"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Reward Text -->
+            <TextView
+                android:id="@+id/reward_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/ad_text_size_medium"
+                android:textColor="@color/ad_reward_color"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/ad_margin_small" />
+
+            <!-- Video Progress Bar -->
+            <ProgressBar
+                android:id="@+id/video_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/ad_progress_bar_height"
+                android:layout_marginTop="@dimen/ad_margin_medium"
+                android:progressTint="@color/ad_reward_color"
+                android:progressBackgroundTint="@color/ad_disabled_color" />
+
+            <!-- Progress Text -->
+            <TextView
+                android:id="@+id/video_progress_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textSize="@dimen/ad_text_size_small"
+                android:textColor="@android:color/white"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/ad_margin_small" />
+
+            <!-- Skip Warning -->
+            <TextView
+                android:id="@+id/skip_warning_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Watch full video to earn reward"
+                android:textSize="@dimen/ad_text_size_small"
+                android:textColor="@color/ad_warning_color"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/ad_margin_small" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Reward Earned Screen -->
+    <LinearLayout
+        android:id="@+id/reward_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="@dimen/ad_padding_xlarge"
+        android:visibility="gone">
+
+        <!-- Reward Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/ad_margin_large"
+            app:cardCornerRadius="@dimen/ad_corner_radius_large"
+            app:cardElevation="@dimen/ad_elevation_large"
+            app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="@dimen/ad_padding_xlarge">
+
+                <!-- Reward Icon -->
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_reward"
+                    android:tint="@color/ad_reward_color"
+                    android:contentDescription="@string/ad_reward_icon" />
+
+                <!-- Congratulations Text -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Congratulations!"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/ad_text_primary"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/ad_margin_large" />
+
+                <!-- Reward Earned Text -->
+                <TextView
+                    android:id="@+id/reward_earned_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/ad_text_size_large"
+                    android:textColor="@color/ad_reward_color"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/ad_margin_medium" />
+
+                <!-- Success Message -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Thank you for watching!"
+                    android:textSize="@dimen/ad_text_size_medium"
+                    android:textColor="@color/ad_text_secondary"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/ad_margin_small" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <!-- Close Button -->
+    <ImageButton
+        android:id="@+id/close_button"
+        android:layout_width="@dimen/ad_close_button_size"
+        android:layout_height="@dimen/ad_close_button_size"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/ad_margin_medium"
+        android:src="@drawable/ic_close"
+        android:background="@drawable/close_button_background"
+        android:contentDescription="@string/ad_close_description"
+        android:elevation="@dimen/ad_elevation_medium"
+        android:visibility="gone" />
+
+</FrameLayout>

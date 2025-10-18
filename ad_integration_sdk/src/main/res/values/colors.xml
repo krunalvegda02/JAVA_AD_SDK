@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="ad_primary_color">#2196F3</color>
+    <color name="ad_primary_color_dark">#1976D2</color>
+    <color name="ad_primary_color_light">#BBDEFB</color>
+
+    <!-- Accent Colors -->
+    <color name="ad_accent_color">#FFFFFF</color> <!-- White or accent color -->
+    <color name="ad_accent_color_dark">#F57C00</color>
+    <color name="ad_accent_color_light">#FFE0B2</color>
+
+    <!-- Text Colors -->
+    <color name="ad_text_primary">#212121</color> <!-- Dark text -->
+    <color name="ad_text_secondary">#757575</color> <!-- Secondary text -->
+    <color name="ad_text_hint">#BDBDBD</color>
+
+    <!-- Background Colors -->
+    <color name="ad_background_primary">#FFFFFF</color>
+    <color name="ad_background_secondary">#F5F5F5</color>
+    <color name="ad_media_background">#EEEEEE</color>
+    <color name="ad_label_background">#E8F5E8</color>
+
+    <!-- Border and Divider -->
+    <color name="ad_border_color">#E0E0E0</color>
+    <color name="ad_divider_color">#EEEEEE</color>
+
+    <!-- State Colors -->
+    <color name="ad_success_color">#4CAF50</color>
+    <color name="ad_error_color">#F44336</color>
+    <color name="ad_warning_color">#FF9800</color>
+    <color name="ad_disabled_color">#BDBDBD</color>
+
+    <!-- Reward Color -->
+    <color name="ad_reward_color">#FFD700</color>
+    <color name="ad_reward_color_dark">#FFC107</color>
+
+    <color name="ad_primary">#FF4081</color>
+</resources>
+

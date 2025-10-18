@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF">
+
+    <!-- Loading State -->
+    <FrameLayout
+        android:id="@+id/loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#F5F5F5"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center" />
+    </FrameLayout>
+
+    <!-- Error State -->
+    <FrameLayout
+        android:id="@+id/error_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#F0F0F0"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Ad Unavailable"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+    </FrameLayout>
+
+    <!-- Ad Content -->
+    <FrameLayout
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ad_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/ad_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:background="#99000000"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="2dp"
+            android:text="Ad"
+            android:textColor="@android:color/white"
+            android:textSize="8sp" />
+    </FrameLayout>
+
+</FrameLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Ad Labels -->
+    <string name="ad_sponsored">Sponsored</string>
+    <string name="ad_advertisement">Advertisement</string>
+    <string name="ad_promoted">Promoted</string>
+
+    <!-- CTA Default Text -->
+    <string name="ad_cta_default">Learn More</string>
+    <string name="ad_cta_install">Install</string>
+    <string name="ad_cta_download">Download</string>
+    <string name="ad_cta_shop">Shop Now</string>
+    <string name="ad_cta_play">Play Now</string>
+    <string name="ad_cta_watch">Watch</string>
+
+    <!-- Loading and Error States -->
+    <string name="ad_loading">Loading ad…</string>
+    <string name="ad_error">Failed to load ad</string>
+    <string name="ad_no_ads">No ads available</string>
+    <string name="ad_network_error">Network error</string>
+
+    <!-- Accessibility -->
+    <string name="ad_image_description">Advertisement image</string>
+    <string name="ad_video_description">Advertisement video</string>
+    <string name="ad_close_description">Close advertisement</string>
+    <string name="ad_reward_icon">Reward icon</string>
+
+    <!-- Privacy -->
+    <string name="ad_privacy_notice">Personalized ads</string>
+    <string name="ad_data_usage">Data usage policy</string>
+
+
+    <string name="ad_image_desc">Advertisement Image</string>
+    <string name="ad_label">Ad</string>
+</resources>

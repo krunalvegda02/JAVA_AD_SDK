@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Padding -->
+    <dimen name="ad_padding_tiny">4dp</dimen>
+    <dimen name="ad_padding_small">8dp</dimen>
+    <dimen name="ad_padding_medium">12dp</dimen>
+    <dimen name="ad_padding_large">16dp</dimen>
+    <dimen name="ad_padding_xlarge">24dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="ad_margin_tiny">4dp</dimen>
+    <dimen name="ad_margin_small">8dp</dimen>
+    <dimen name="ad_margin_medium">12dp</dimen>
+    <dimen name="ad_margin_large">16dp</dimen>
+
+    <!-- Corner Radius -->
+    <dimen name="ad_corner_radius_small">4dp</dimen>
+    <dimen name="ad_corner_radius_medium">8dp</dimen>
+    <dimen name="ad_corner_radius_large">16dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="ad_elevation_small">2dp</dimen>
+    <dimen name="ad_elevation_medium">4dp</dimen>
+    <dimen name="ad_elevation_large">8dp</dimen>
+
+    <!-- Text Sizes -->
+    <dimen name="ad_text_size_tiny">10sp</dimen>
+    <dimen name="ad_text_size_small">12sp</dimen>
+    <dimen name="ad_text_size_medium">14sp</dimen>
+    <dimen name="ad_text_size_large">16sp</dimen>
+    <dimen name="ad_text_size_xlarge">18sp</dimen>
+
+    <!-- Ad Specific -->
+    <dimen name="ad_media_size">80dp</dimen>
+    <dimen name="ad_banner_min_height">60dp</dimen>
+    <dimen name="ad_cta_min_width">72dp</dimen>
+
+    <dimen name="ad_close_button_size">40dp</dimen>
+    <dimen name="ad_progress_bar_height">4dp</dimen>
+    <dimen name="ad_banner_height">80dp</dimen>
+    <dimen name="ad_title_text_size">16sp</dimen>
+    <dimen name="ad_description_text_size">14sp</dimen>
+    <dimen name="ad_cta_text_size">14sp</dimen>
+    <dimen name="ad_corner_radius">8dp</dimen>
+    <dimen name="ad_button_corner_radius">4dp</dimen>
+</resources>
