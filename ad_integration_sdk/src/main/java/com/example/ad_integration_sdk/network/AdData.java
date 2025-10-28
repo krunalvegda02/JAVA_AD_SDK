@@ -1,5 +1,9 @@
 package com.example.ad_integration_sdk.network;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
 /**
  * Model class representing an advertisement
  * Contains all the data needed to display an ad
@@ -27,6 +31,17 @@ public class AdData {
         this.clickUrl = clickUrl;
         this.timestamp = System.currentTimeMillis();
     }
+
+    public Intent getClickIntent(Context context) {
+        if (clickUrl == null || clickUrl.trim().isEmpty()) {
+            return null;
+        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(clickUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+
 
     // Validation methods
     public boolean isValid() {
