@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,23 +19,32 @@ import com.example.ad_integration_sdk.AdSDK;
 import com.example.ad_integration_sdk.R;
 import com.example.ad_integration_sdk.network.AdData;
 import com.example.ad_integration_sdk.network.NetworkClient;
+import com.example.ad_integration_sdk.utils.AdSize;
 import com.example.ad_integration_sdk.utils.Logger;
 
+/**
+ * BannerAdView — Handles displaying, tracking, and user interactions for banner ads.
+ * Supports only predefined AdSizes from AdSize.java
+ */
 public class BannerAdView extends FrameLayout {
+
     private static final String TAG = "BannerAdView";
 
-    // UI Components
+    // UI components
     private FrameLayout loadingContainer;
     private FrameLayout errorContainer;
     private FrameLayout contentContainer;
     private ImageView adImage;
     private TextView adLabel;
 
-    // State
+    // Ad state
     private AdData currentAdData;
     private AdEventListener.BannerAdListener adListener;
-    private boolean isLoaded;
-    private boolean impressionTracked;
+    private boolean isLoaded = false;
+    private boolean impressionTracked = false;
+
+    // Fixed ad size
+    private AdSize adSize = AdSize.BANNER; // Default
 
     public BannerAdView(Context context) {
         super(context);
@@ -55,24 +65,19 @@ public class BannerAdView extends FrameLayout {
         try {
             LayoutInflater.from(getContext()).inflate(R.layout.banner_ad_layout, this, true);
 
-            // Find views
             loadingContainer = findViewById(R.id.loading_container);
             errorContainer = findViewById(R.id.error_container);
             contentContainer = findViewById(R.id.content_container);
             adImage = findViewById(R.id.ad_image);
             adLabel = findViewById(R.id.ad_label);
 
-            // Verify all views are found
-            if (loadingContainer == null || errorContainer == null ||
-                    contentContainer == null || adImage == null || adLabel == null) {
-                Logger.e(TAG, "Failed to find required views in banner_ad_layout");
+            if (loadingContainer == null || errorContainer == null || contentContainer == null ||
+                    adImage == null || adLabel == null) {
+                Logger.e(TAG, "Missing required views in banner_ad_layout");
                 throw new RuntimeException("Banner layout inflation failed - missing required views");
             }
 
-            // Setup click handling
             setupClickHandling();
-
-            // Start in loading state
             showLoading();
 
         } catch (Exception e) {
@@ -81,13 +86,51 @@ public class BannerAdView extends FrameLayout {
         }
     }
 
+    /**
+     * Sets the predefined ad size for this banner.
+     * Only AdSize constants are allowed.
+     */
+    public void setAdSize(AdSize size) {
+        if (size == null) {
+            Logger.w(TAG, "Null AdSize passed, using default BANNER");
+            size = AdSize.BANNER;
+        }
+        this.adSize = size;
+
+        // Apply layout params dynamically
+        int widthPx = size.getWidthInPixels(getContext());
+        int heightPx = size.getHeightInPixels(getContext());
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(widthPx, heightPx);
+        setLayoutParams(params);
+
+        Logger.d(TAG, "BannerAdView size set to: " + size.toString());
+    }
+
+    public AdSize getAdSize() {
+        return adSize;
+    }
 
     public void setAdListener(AdEventListener.BannerAdListener listener) {
         this.adListener = listener;
     }
 
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
+    public void destroy() {
+        currentAdData = null;
+        isLoaded = false;
+        impressionTracked = false;
+    }
+
+    /**
+     * Loads an ad using a placement ID.
+     */
     public void loadAd(String placementId) {
         if (!AdSDK.isInitialized()) {
+            Logger.e(TAG, "Ad SDK not initialized");
             showError();
             notifyAdFailedToLoad("SDK not initialized");
             return;
@@ -100,6 +143,7 @@ public class BannerAdView extends FrameLayout {
             @Override
             public void onAdLoaded(AdData adData) {
                 if (adData == null || !adData.isValid() || !adData.hasImage()) {
+                    Logger.w(TAG, "Invalid ad data received");
                     showError();
                     notifyAdFailedToLoad("Invalid ad data");
                     return;
@@ -117,33 +161,11 @@ public class BannerAdView extends FrameLayout {
 
             @Override
             public void onAdFailedToLoad(String error) {
+                Logger.e(TAG, "Ad failed to load: " + error);
                 showError();
                 notifyAdFailedToLoad(error);
             }
         });
-    }
-
-    public void setBannerSize(int widthDp, int heightDp) {
-        int widthPx = (int) (widthDp * getResources().getDisplayMetrics().density);
-        int heightPx = (int) (heightDp * getResources().getDisplayMetrics().density);
-
-        if (getLayoutParams() != null) {
-            getLayoutParams().width = widthPx;
-            getLayoutParams().height = heightPx;
-            requestLayout();
-        } else {
-            setLayoutParams(new FrameLayout.LayoutParams(widthPx, heightPx));
-        }
-    }
-
-    public void destroy() {
-        currentAdData = null;
-        isLoaded = false;
-        impressionTracked = false;
-    }
-
-    public boolean isLoaded() {
-        return isLoaded;
     }
 
     private void resetState() {
@@ -153,97 +175,102 @@ public class BannerAdView extends FrameLayout {
     }
 
     private void populateAdContent() {
-        if (currentAdData == null || !currentAdData.hasImage()) return;
+        if (currentAdData == null || !currentAdData.hasImage()) {
+            Logger.w(TAG, "No valid ad image to load");
+            return;
+        }
 
-        // Load ad image
         Glide.with(getContext())
                 .load(currentAdData.getImageUrl())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ad_placeholder)
+                .error(R.drawable.ad_error)
                 .into(adImage);
 
-        // Set "Ad" label (always shows "Ad")
         adLabel.setText("Ad");
     }
 
     private void setupClickHandling() {
         OnClickListener clickListener = v -> handleAdClick();
 
-        setOnClickListener(clickListener);
-        contentContainer.setOnClickListener(clickListener);
-        adImage.setOnClickListener(clickListener);
+        this.setOnClickListener(clickListener);
+        if (contentContainer != null) contentContainer.setOnClickListener(clickListener);
+        if (adImage != null) adImage.setOnClickListener(clickListener);
     }
 
     private void handleAdClick() {
-        if (currentAdData == null) return;
+        if (currentAdData == null || currentAdData.getClickUrl() == null) return;
 
         trackClick();
         notifyAdClicked();
 
-        String clickUrl = currentAdData.getClickUrl();
-        if (clickUrl != null && !clickUrl.isEmpty()) {
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(clickUrl));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
-                notifyAdOpened();
-            } catch (Exception e) {
-                Logger.e(TAG, "Failed to open URL", e);
-            }
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(currentAdData.getClickUrl()));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+            notifyAdOpened();
+        } catch (Exception e) {
+            Logger.e(TAG, "Failed to open ad URL", e);
         }
     }
 
+    // UI helpers
     private void showLoading() {
-        loadingContainer.setVisibility(VISIBLE);
-        errorContainer.setVisibility(GONE);
-        contentContainer.setVisibility(GONE);
+        if (loadingContainer != null) loadingContainer.setVisibility(VISIBLE);
+        if (errorContainer != null) errorContainer.setVisibility(GONE);
+        if (contentContainer != null) contentContainer.setVisibility(GONE);
     }
 
     private void showError() {
-        loadingContainer.setVisibility(GONE);
-        errorContainer.setVisibility(VISIBLE);
-        contentContainer.setVisibility(GONE);
+        if (loadingContainer != null) loadingContainer.setVisibility(GONE);
+        if (errorContainer != null) errorContainer.setVisibility(VISIBLE);
+        if (contentContainer != null) contentContainer.setVisibility(GONE);
     }
 
     private void showContent() {
-        loadingContainer.setVisibility(GONE);
-        errorContainer.setVisibility(GONE);
-        contentContainer.setVisibility(VISIBLE);
+        if (loadingContainer != null) loadingContainer.setVisibility(GONE);
+        if (errorContainer != null) errorContainer.setVisibility(GONE);
+        if (contentContainer != null) contentContainer.setVisibility(VISIBLE);
     }
 
     private void trackImpression() {
         if (impressionTracked || currentAdData == null) return;
 
         impressionTracked = true;
-        AdSDK.getInstance().getNetworkClient().trackEvent(currentAdData.getAdId(), "impression", new NetworkClient.TrackingCallback() {
-            @Override
-            public void onTrackingSuccess() {
-                notifyAdImpression();
-            }
 
-            @Override
-            public void onTrackingFailed(String error) {
-                Logger.w(TAG, "Impression tracking failed: " + error);
-            }
-        });
+        AdSDK.getInstance().getNetworkClient().trackEvent(currentAdData.getAdId(), "impression",
+                new NetworkClient.TrackingCallback() {
+                    @Override
+                    public void onTrackingSuccess() {
+                        Logger.d(TAG, "Impression tracked");
+                        notifyAdImpression();
+                    }
+
+                    @Override
+                    public void onTrackingFailed(String error) {
+                        Logger.w(TAG, "Impression tracking failed: " + error);
+                    }
+                });
     }
 
     private void trackClick() {
         if (currentAdData == null) return;
 
-        AdSDK.getInstance().getNetworkClient().trackEvent(currentAdData.getAdId(), "click", new NetworkClient.TrackingCallback() {
-            @Override
-            public void onTrackingSuccess() {
-                Logger.d(TAG, "Click tracked");
-            }
+        AdSDK.getInstance().getNetworkClient().trackEvent(currentAdData.getAdId(), "click",
+                new NetworkClient.TrackingCallback() {
+                    @Override
+                    public void onTrackingSuccess() {
+                        Logger.d(TAG, "Click tracked");
+                    }
 
-            @Override
-            public void onTrackingFailed(String error) {
-                Logger.w(TAG, "Click tracking failed: " + error);
-            }
-        });
+                    @Override
+                    public void onTrackingFailed(String error) {
+                        Logger.w(TAG, "Click tracking failed: " + error);
+                    }
+                });
     }
 
-    // Event notifications
+    // Ad Event Callbacks
     private void notifyAdLoaded() {
         if (adListener != null) adListener.onAdLoaded();
     }

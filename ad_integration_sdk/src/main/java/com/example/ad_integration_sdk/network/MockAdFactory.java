@@ -13,7 +13,7 @@ public class MockAdFactory {
                 ad.setTitle("Mock Banner Ad");
                 ad.setDescription("This is a static banner ad.");
                 ad.setCtaText("Shop Now");
-                ad.setImageUrl("https://via.placeholder.com/320x50?text=Banner+Ad");
+                ad.setImageUrl("https://images.pexels.com/photos/1054655/pexels-photo-1054655.jpeg");
                 ad.setSponsoredLabel("Sponsored");
                 break;
 
